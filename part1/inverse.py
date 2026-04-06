@@ -9,7 +9,7 @@ def determinant(A):
 
     for i in range(n):
         max_row = i + np.argmax(np.abs(matrix[i:, i]))
-        
+            
         if np.abs(matrix[max_row, i]) < 1e-12:
             return 0.0 
         
@@ -26,53 +26,79 @@ def determinant(A):
     return ((-1) ** s) * det 
 
 def inverse(A):
+    # kiểm tra định thức
     det_A = determinant(A)
-    #so sanh voi esilon vi khi tinh det bang float co the ra 0.00000000abc thi khong the so sanh voi 0 duoc
-    if np.abs(det_A) < 1e-12:
-        raise ValueError("Ma tran khong kha nghich vi dinh thuc bang 0.")
+    if abs(det_A) < 1e-12:
+        raise ValueError("Ma trận không khả nghịch vì định thức bằng 0.")
+    n = len(A)
     
-    #tao ma tran ep kieu float
-    matrix = np.array(A, dtype= float) 
-    n = matrix.shape[0] 
+    # tạo ma trận ghép
+    combined = []
+    for i in range(n): #dòng i cột j
+        row = []
+        # ma trận A
+        for j in range(n):
+            row.append(float(A[i][j]))
+        # ma trận đơn vị I
+        for j in range(n):
+            if i == j:
+                row.append(1.0)
+            else:
+                row.append(0.0)
+        combined.append(row)
     
-    #ghep ma tran
-    combined = np.hstack((matrix, np.eye(n)))
-    
-    #bien doi so cap
+    # Biến đổi sơ cấp 
     for i in range(n):
-        # partial pivoting 
-        max_row = i + np.argmax(np.abs(combined[i:, i])) #chon dong chua phan tu lon nhat cua cot 
-        combined[[i, max_row]] = combined[[max_row, i]] # hoan doi dong do voi dong dang xet
+        # tìm dòng chứa số lớn nhất trong cột
+        max_row = i
+        max_val = abs(combined[i][i])
+        for k in range(i + 1, n):
+            if abs(combined[k][i]) > max_val:
+                max_val = abs(combined[k][i])
+                max_row = k
+                
+        # hoán đổi 2 dòng
+        if max_row != i:
+            combined[i], combined[max_row] = combined[max_row], combined[i]
 
-        # dua pivot ve 1
-        pivot = combined[i, i] 
-        combined[i] /= pivot 
-
-        # khu cac phan tu
+        # đưa pivot về 1
+        pivot = combined[i][i] 
+        for k in range(2 * n): # 2*n vì là ma trận ghép 
+            combined[i][k] /= pivot 
+            
+        # khử về dòng 0
         for j in range(n):
             if i != j:
-                factor = combined[j, i]
-                combined[j] -= factor * combined[i] #dong j tru 1 factor dong i 
+                factor = combined[j][i]
+                for k in range(2 * n):
+                    combined[j][k] -= factor * combined[i][k]
     
-    #tra ve A^-1
-    return combined[:, n:] 
-    
-    #vibe code test thu 
+    # tách kết quả A^-1
+    A_inv = []
+    for i in range(n):
+        row = []
+        for j in range(n, 2 * n): # cắt lấy nửa phải
+            row.append(combined[i][j])
+        A_inv.append(row)
+        
+    return A_inv 
 
 def verify_solution(A, A_inv):
-    A = np.array(A, dtype=float)
-    n = A.shape[0]
+    A_np = np.array(A, dtype=float)
+    A_inv_np = np.array(A_inv, dtype=float) # tạo 2 ma trận numpy
+    n = A_np.shape[0]
     
-    identity_check = np.dot(A, A_inv)
+    identity_check = np.dot(A_np, A_inv_np) # nhân 2 ma trận
     I = np.eye(n)
     
     is_identity = np.allclose(identity_check, I, atol=1e-8)
     
     try:
-        np_inv = np.linalg.inv(A)
-        is_correct_with_numpy = np.allclose(A_inv, np_inv, atol=1e-8)
+        np_inv = np.linalg.inv(A_np)
+        is_correct_with_numpy = np.allclose(A_inv_np, np_inv, atol=1e-8)
     except np.linalg.LinAlgError:
         is_correct_with_numpy = False 
+        
     print(f"1. A * A_inv ≈ I: {'ĐÚNG' if is_identity else 'SAI'}")
     print(f"2. Khớp với NumPy: {'ĐÚNG' if is_correct_with_numpy else 'SAI'}")
     
@@ -85,8 +111,11 @@ if __name__ == "__main__":
 
     try:
         my_inv = inverse(A_test) 
-        print("Ma trận nghịch đảo tự tính:\n", my_inv)
+        print("Ma trận nghịch đảo tự tính:")
+        for row in my_inv:
+            print([round(x, 4) for x in row]) 
         
+        print("\n--- KIỂM CHỨNG ---")
         verify_solution(A_test, my_inv)
     except Exception as e:
         print(f"Lỗi: {e}")
