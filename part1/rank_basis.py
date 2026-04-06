@@ -1,86 +1,113 @@
 import numpy as np
 
 def rank_and_basis(A):
-    matrix = np.array(A, dtype=float)
-    m, n = matrix.shape
+    m = len(A) # m dòng n cột 
+    n = len(A[0])
     
-    rref = matrix.copy()
+    # tạo bản sao để dùng cho không gian cột 
+    rref = [[float(val) for val in row] for row in A]
     
     pivot_row = 0
     pivot_cols = []
 
-    # khu gauss logic giong inverse.py
+    # khử gauss logic giống inverse.py
     for j in range(n): 
         if pivot_row < m:
-            max_idx = pivot_row + np.argmax(np.abs(rref[pivot_row:, j])) 
-            if np.abs(rref[max_idx, j]) < 1e-12: #truong hop cot ko co pivot (toan so 0)
+            max_idx = pivot_row
+            for k in range(pivot_row + 1, m):
+                if abs(rref[k][j]) > abs(rref[max_idx][j]):
+                    max_idx = k
+            
+            # nếu cột toàn số 0 
+            if abs(rref[max_idx][j]) < 1e-12: 
                 continue
             
-            rref[[pivot_row, max_idx]] = rref[[max_idx, pivot_row]]
+            # hoán đổi dòng
+            if max_idx != pivot_row:
+                rref[pivot_row], rref[max_idx] = rref[max_idx], rref[pivot_row]
             
-            # luu lai chi so cot pivot de xac dinh co so sau nay 
+            # lưu lại chỉ số cột pivot để tính
             pivot_cols.append(j)
 
-            pivot_val = rref[pivot_row, j]
-            rref[pivot_row] = rref[pivot_row] / pivot_val
+            # --- Đưa pivot về 1 ---
+            pivot_val = rref[pivot_row][j]
+            for k in range(n):
+                rref[pivot_row][k] /= pivot_val
             
+            # --- Khử các dòng khác về 0 ---
             for i in range(m):
                 if i != pivot_row:
-                    factor = rref[i, j]
-                    rref[i] = rref[i] - factor * rref[pivot_row]
+                    factor = rref[i][j]
+                    for k in range(n):
+                        rref[i][k] -= factor * rref[pivot_row][k]
             
             pivot_row += 1
-
-    # tinh toan cac yeu cau
-    # hang (Rank) = so luong cot pivot tim duoc 
+    
+    # 1. Hạng (Rank)
     rank = len(pivot_cols)
     
-    # co so khong gian Dong R(A): Cac dong khac 0 trong RREF 
-    row_basis = rref[:rank]
+    # 2. Cơ sở không gian Dòng
+    # lấy [rank] dòng của rref
+    row_basis = [rref[i] for i in range(rank)]
     
-    # co so khong gian Cot C(A): Cac cot tuong ung pivot lay tu ma tran GOC 
-    column_basis = matrix[:, pivot_cols].T 
+    # 3. Cơ sở không gian Cột 
+    column_basis = []
+    for p_col in pivot_cols:
+        col = [float(A[i][p_col]) for i in range(m)] # Lấy từng dòng của cột p_col
+        column_basis.append(col)
 
-    # co so khong gian Nghiem N(A): Giai Ax = 0 tu RREF 
+    # 4. Cơ sở không gian Nghiệm
     null_basis = []
     free_vars = [c for c in range(n) if c not in pivot_cols] 
     
     for f_var in free_vars:
-        special_sol = np.zeros(n)
-        special_sol[f_var] = 1 # Dat mot bien tu do = 1 (so nao khac cung duoc)
-        for r_idx, p_col in enumerate(pivot_cols): #r_idx la so dong, p_col la cot pivot
-            special_sol[p_col] = -rref[r_idx, f_var]
+        special_sol = [0.0 for _ in range(n)]
+        special_sol[f_var] = 1.0
+        
+        for r_idx, p_col in enumerate(pivot_cols): 
+            special_sol[p_col] = -rref[r_idx][f_var]
+        
         null_basis.append(special_sol)
 
-    return rank, column_basis, row_basis, np.array(null_basis)
+    return rank, column_basis, row_basis, null_basis
 
 def verify_rank_and_basis(A, my_rank):
-    A_np = np.array(A)
+    A_np = np.array(A, dtype=float)
     np_rank = np.linalg.matrix_rank(A_np)
     
-    print(f"Rank tu tinh: {my_rank}")
-    print(f"Rank cua NumPy: {np_rank}")
+    print(f"Rank tự tính: {my_rank}")
+    print(f"Rank của NumPy: {np_rank}")
     
     if my_rank == np_rank:
-        print("=> KET QUA RANK: CHINH XAC")
+        print("KẾT QUẢ RANK: CHÍNH XÁC")
     else:
-        print("=> KET QUA RANK: SAI")
+        print("KẾT QUẢ RANK: SAI")
 
 if __name__ == "__main__":
     A_test = [[1, 2, 3], 
               [4, 5, 6], 
               [5, 7, 9]]
     
-    print("Ma tran dau vao A:")
-    print(np.array(A_test))
+    print("Ma trận đầu vào A:")
+    for row in A_test:
+        print(row)
     print("-" * 30)
     
     r, c_basis, r_basis, n_basis = rank_and_basis(A_test)
     
-    print(f"Hang cua ma tran: {r}")
-    print(f"Co so khong gian Cot (Column Space):\n{c_basis}")
-    print(f"Co so khong gian Dong (Row Space):\n{r_basis}")
-    print(f"Co so khong gian Nghiem (Null Space):\n{n_basis}")
+    print(f"Hạng của ma trận: {r}")
+    
+    print("\nCơ sở không gian Cột (Column Space):")
+    for vec in c_basis: print([round(x, 4) for x in vec])
+        
+    print("\nCơ sở không gian Dòng (Row Space):")
+    for vec in r_basis: print([round(x, 4) for x in vec])
+        
+    print("\nCơ sở không gian Nghiệm (Null Space):")
+    if not n_basis:
+        print("[] (Nghiệm duy nhất x = 0)")
+    else:
+        for vec in n_basis: print([round(x, 4) for x in vec])
     print("-" * 30)
     
     verify_rank_and_basis(A_test, r)
