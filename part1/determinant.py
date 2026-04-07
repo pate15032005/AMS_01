@@ -5,9 +5,13 @@ def determinant(A):
     Tính định thức của ma trận vuông bằng cách khử Gauss.
     Trả về giá trị định thức của ma trận.
     """
+
     # Tạo bản sao    
+    n = len(A)
+    if n == 0 or any(len(row) != n for row in A):
+        raise ValueError("Không thể tính định thức của ma trận này")
+
     A_work = copy.deepcopy(A)
-    n = len(A_work)
     det = 1.0
     swaps = 0
     
@@ -37,10 +41,5 @@ def determinant(A):
                 else:
                     A_work[k][j] -= factor * A_work[i][j]
 
-    return det*(-1)**swaps
+    return det * (-1) ** swaps
 
-
-A = [[1, 1, -1], [-3, -1, 2], [-2, 1, 2]]
-
-det = determinant(A)
-print(f"Định thức ma trận det(A) = {det:g}")
