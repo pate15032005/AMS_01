@@ -74,6 +74,22 @@ def multiply(A, B):
 
     return result
 
+# Kiểm chứng bằng Numpy
+import numpy as np
+def verify_with_numpy(A, L):
+    # chuyển sang numpy array
+    A_np = np.array(A)
+    L_np = np.array(L)
+
+    # tính lại A từ L * L^T
+    A_reconstructed = L_np @ L_np.T
+
+    # so sánh gần đúng (do sai số số thực)
+    if np.allclose(A_np, A_reconstructed):
+        return True
+    else:
+        return False
+
 def test_cholesky():
     # Danh sách các test case:
     # - Ma trận hợp lệ (SPD)
@@ -98,9 +114,13 @@ def test_cholesky():
 
         try:
             L = cholesky(A)
+
             print("L:")
             for row in L:
                 print(row)
+
+            is_correct = verify_with_numpy(A, L)
+            print("Verify with NumPy:", is_correct)
         except Exception as e:
             print("Error:", e)
 
