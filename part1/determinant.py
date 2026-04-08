@@ -9,7 +9,7 @@ def determinant(A):
     # Tạo bản sao    
     n = len(A)
     if n == 0 or any(len(row) != n for row in A):
-        raise ValueError("Không thể tính định thức của ma trận này")
+        raise ValueError("Cannot calculate determinant of this matrix")
 
     A_work = copy.deepcopy(A)
     det = 1.0
