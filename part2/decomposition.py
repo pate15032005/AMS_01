@@ -1,4 +1,13 @@
-﻿def cholesky(A):
+﻿import numpy as np
+import sys
+import os
+
+# Add the root directory to PATH to find 'part0'
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from part0.helper_functions import print_matrix, matrix_transpose, matrix_multiply
+
+def cholesky(A):
     n = len(A)
 
     # Khởi tạo ma trận L (tam giác dưới) với toàn giá trị 0
@@ -39,43 +48,7 @@
 
     return L
 
-def transpose(A):
-    # Lấy số hàng (n) và số cột (m) của ma trận A
-    n = len(A)
-    m = len(A[0])
 
-    # Khởi tạo ma trận chuyển vị T có kích thước m x n
-    T = [[0]*n for _ in range(m)]
-
-     # Duyệt qua từng phần tử của A
-    for i in range(n):
-        for j in range(m):
-            # Hoán đổi vị trí: phần tử A[i][j] -> T[j][i]
-            T[j][i] = A[i][j]
-
-    return T
-
-def multiply(A, B):
-    # Lấy kích thước:
-    # A: n x p, B: p x m
-    n = len(A)
-    m = len(B[0])
-    p = len(B)
-
-    # Khởi tạo ma trận kết quả kích thước n x m
-    result = [[0]*m for _ in range(n)]
-
-    # Thực hiện phép nhân ma trận
-    for i in range(n):
-        for j in range(m):
-            # Tính phần tử (i, j)
-            for k in range(p):
-                result[i][j] += A[i][k] * B[k][j]
-
-    return result
-
-# Kiểm chứng bằng Numpy
-import numpy as np
 def verify_with_numpy(A, L):
     # chuyển sang numpy array
     A_np = np.array(A)
@@ -105,19 +78,15 @@ def test_cholesky():
     ]
 
     for name, A in test_cases:
-        print(f"\n- Test: {name} ")
+        print("\n- Test: {}".format(name))
 
         # in ma trận A
-        print("Matrix A:")
-        for row in A:
-            print(row)
+        print_matrix("Matrix A", A)
 
         try:
             L = cholesky(A)
 
-            print("L:")
-            for row in L:
-                print(row)
+            print_matrix("L (Cholesky factor)", L)
 
             is_correct = verify_with_numpy(A, L)
             print("Verify with NumPy:", is_correct)

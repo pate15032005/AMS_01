@@ -1,35 +1,15 @@
 import numpy as np
-
-#de day den khi Thien code xong (3)
-def determinant(A):
-    matrix = np.array(A, dtype=float)
-    n = matrix.shape[0]
-    s = 0  
-    det = 1.0
-
-    for i in range(n):
-        max_row = i + np.argmax(np.abs(matrix[i:, i]))
-            
-        if np.abs(matrix[max_row, i]) < 1e-12:
-            return 0.0 
-        
-        if max_row != i:
-            matrix[[i, max_row]] = matrix[[max_row, i]]
-            s += 1
-        
-        det *= matrix[i, i]
-        
-        for j in range(i + 1, n):
-            factor = matrix[j, i] / matrix[i, i]
-            matrix[j] -= factor * matrix[i]
-
-    return ((-1) ** s) * det 
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from part0.helper_functions import print_matrix
+from part1.determinant import determinant
 
 def inverse(A):
     # kiểm tra định thức
     det_A = determinant(A)
     if abs(det_A) < 1e-12:
-        raise ValueError("Ma trận không khả nghịch vì định thức bằng 0.")
+        raise ValueError("Matrix is not invertible because determinant is 0.")
     n = len(A)
     
     # tạo ma trận ghép
@@ -99,8 +79,8 @@ def verify_solution(A, A_inv):
     except np.linalg.LinAlgError:
         is_correct_with_numpy = False 
         
-    print(f"1. A * A_inv ≈ I: {'ĐÚNG' if is_identity else 'SAI'}")
-    print(f"2. Khớp với NumPy: {'ĐÚNG' if is_correct_with_numpy else 'SAI'}")
+    print(f"1. A * A_inv = I: {'CORRECT' if is_identity else 'INCORRECT'}")
+    print(f"2. Matches NumPy: {'CORRECT' if is_correct_with_numpy else 'INCORRECT'}")
     
     return is_identity and is_correct_with_numpy
 
@@ -111,11 +91,11 @@ if __name__ == "__main__":
 
     try:
         my_inv = inverse(A_test) 
-        print("Ma trận nghịch đảo tự tính:")
+        print("Calculated inverse matrix:")
         for row in my_inv:
             print([round(x, 4) for x in row]) 
         
-        print("\n--- KIỂM CHỨNG ---")
+        print("\nVERIFICATION")
         verify_solution(A_test, my_inv)
     except Exception as e:
-        print(f"Lỗi: {e}")
+        print(f"Error: {e}")

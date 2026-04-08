@@ -19,7 +19,7 @@ def rank_and_basis(A):
                     max_idx = k
             
             # nếu cột toàn số 0 
-            if abs(rref[max_idx][j]) < 1e-12: 
+            if abs(rref[max_idx][j]) < 1e-7:
                 continue
             
             # hoán đổi dòng
@@ -40,7 +40,8 @@ def rank_and_basis(A):
                     factor = rref[i][j]
                     for k in range(n):
                         rref[i][k] -= factor * rref[pivot_row][k]
-            
+                        if abs(rref[i][k]) < 1e-9: # Pate thêm đk này
+                            rref[i][k] = 0.0 # để ép về 0, tránh tích lũy sai số   
             pivot_row += 1
     
     # 1. Hạng (Rank)
@@ -75,37 +76,37 @@ def verify_rank_and_basis(A, my_rank):
     A_np = np.array(A, dtype=float)
     np_rank = np.linalg.matrix_rank(A_np)
     
-    print(f"Rank tự tính: {my_rank}")
-    print(f"Rank của NumPy: {np_rank}")
+    print(f"Calculated rank: {my_rank}")
+    print(f"NumPy rank: {np_rank}")
     
     if my_rank == np_rank:
-        print("KẾT QUẢ RANK: CHÍNH XÁC")
+        print("RANK RESULT: CORRECT")
     else:
-        print("KẾT QUẢ RANK: SAI")
+        print("RANK RESULT: INCORRECT")
 
 if __name__ == "__main__":
     A_test = [[1, 2, 3], 
               [4, 5, 6], 
               [5, 7, 9]]
     
-    print("Ma trận đầu vào A:")
+    print("Input matrix A:")
     for row in A_test:
         print(row)
     print("-" * 30)
     
     r, c_basis, r_basis, n_basis = rank_and_basis(A_test)
     
-    print(f"Hạng của ma trận: {r}")
+    print(f"Rank of matrix: {r}")
     
-    print("\nCơ sở không gian Cột (Column Space):")
+    print("\nBasis of Column Space:")
     for vec in c_basis: print([round(x, 4) for x in vec])
         
-    print("\nCơ sở không gian Dòng (Row Space):")
+    print("\nBasis of Row Space:")
     for vec in r_basis: print([round(x, 4) for x in vec])
         
-    print("\nCơ sở không gian Nghiệm (Null Space):")
+    print("\nBasis of Null Space:")
     if not n_basis:
-        print("[] (Nghiệm duy nhất x = 0)")
+        print("[] (Only solution x = 0)")
     else:
         for vec in n_basis: print([round(x, 4) for x in vec])
     print("-" * 30)

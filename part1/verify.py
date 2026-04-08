@@ -30,18 +30,18 @@ def verify_solution(A, my_x, b):
             # Dùng A_np và b_np đã ép kiểu để so sánh
             is_correct = np.allclose(A_np @ x_array, b_np, atol=1e-12)
             if is_correct:
-                print("=> KIỂM CHỨNG THÀNH CÔNG: Nghiệm x hoàn toàn chính xác.")
+                print("=> VERIFICATION SUCCESS: Solution x is correct (A*x == b).")
             else:
-                print("=> KIỂM CHỨNG THẤT BẠI: Nghiệm x tính sai (A*x != b).")
+                print("=> VERIFICATION FAILED: Solution x is incorrect (A*x != b).")
         else:
-            print("=> KIỂM CHỨNG THẤT BẠI: Hệ có nghiệm nhưng hàm của bạn không tìm được (trả về None).")
+            print("=> VERIFICATION FAILED: System has a solution but your function did not find it (returns None).")
             
     else:
-        print("NumPy xác nhận hệ VÔ NGHIỆM. Bỏ qua bước kiểm tra allclose.")
+        print("NumPy confirms the system is inconsistent (no solution). Skipping allclose verification.")
         if my_x is None:
-            print("=> KIỂM CHỨNG THÀNH CÔNG: Hàm của bạn cũng kết luận vô nghiệm.")
+            print("=> VERIFICATION SUCCESS: Your function also correctly identified the system as inconsistent.")
         else:
-            print("=> KIỂM CHỨNG THẤT BẠI: Hệ vô nghiệm mà hàm của bạn lại tính ra nghiệm x.")
+            print("=> VERIFICATION FAILED: The system is inconsistent, but your function found a solution.")
 
 
 # Hàm kiểm tra định thức
@@ -49,13 +49,13 @@ def verify_determinant(A, my_det):
     A_np = np.array(A, dtype=float)
     np_det = np.linalg.det(A_np)
     
-    print(f"Định thức tự tính: {my_det:g}")
-    print(f"Định thức của NumPy: {np_det:g}")
+    print(f"Determinant calculated: {my_det:g}")
+    print(f"Determinant of NumPy: {np_det:g}")
     
     if np.isclose(my_det, np_det, atol=1e-12):
-        print("=> KIỂM CHỨNG THÀNH CÔNG: Định thức tính đúng.")
+        print("=> VERIFICATION SUCCESS: Determinant is correct.")
     else:
-        print("=> KIỂM CHỨNG THẤT BẠI: Định thức tính sai.")
+        print("=> VERIFICATION FAILED: Determinant is incorrect.")
 
 # Hàm kiểm tra ma trận nghịch đảo
 # Cách 1:
@@ -75,8 +75,8 @@ def verify_inv_solution(A, A_inv):
     except np.linalg.LinAlgError:
         is_correct_with_numpy = False 
         
-    print(f"1. A * A_inv ≈ I: {'ĐÚNG' if is_identity else 'SAI'}")
-    print(f"2. Khớp với NumPy: {'ĐÚNG' if is_correct_with_numpy else 'SAI'}")
+    print(f"1. A * A_inv ≈ I: {'CORRECT' if is_identity else 'INCORRECT'}")
+    print(f"2. Matches NumPy: {'CORRECT' if is_correct_with_numpy else 'INCORRECT'}")
     
     return is_identity and is_correct_with_numpy
 # Cách 2:
@@ -85,21 +85,21 @@ def verify_inverse(A, my_A_inv):
     try:
         np_A_inv = np.linalg.inv(A_np)
         if my_A_inv is None:
-            print("=> KIỂM CHỨNG THẤT BẠI: Không tìm ra ma trận nghịch đảo.")
+            print("=> VERIFICATION FAILED: Could not find the inverse matrix.")
         else:
             my_inv_np = np.array(my_A_inv, dtype=float)
             is_correct = np.allclose(my_inv_np, np_A_inv, atol=1e-12)
             
             if is_correct:
-                print("=> KIỂM CHỨNG THÀNH CÔNG.")
+                print("=> VERIFICATION SUCCESS: Inverse matrix is correct.")
             else:
-                print("=> KIỂM CHỨNG THẤT BẠI.")
+                print("=> VERIFICATION FAILED: Inverse matrix is incorrect.")
             
     except np.linalg.LinAlgError:
         if my_A_inv is None:
-            print("=> KIỂM CHỨNG THÀNH CÔNG: Ma trận suy biến.")
+            print("=> VERIFICATION SUCCESS: The matrix is singular (not invertible).")
         else:
-            print("=> KIỂM CHỨNG THẤT BẠI: Ma trận suy biến.")
+            print("=> VERIFICATION FAILED: The matrix is singular (not invertible).")
 
 
 # Hàm kiểm tra rank
@@ -111,6 +111,6 @@ def verify_rank(A, my_rank):
     print(f"Rank của NumPy: {np_rank}")
     
     if my_rank == np_rank:
-        print("KẾT QUẢ RANK: CHÍNH XÁC")
+        print("=> VERIFICATION SUCCESS: Rank is correct.")
     else:
-        print("KẾT QUẢ RANK: SAI")
+        print("=> VERIFICATION FAILED: Rank is incorrect.")
