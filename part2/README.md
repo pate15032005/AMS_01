@@ -35,7 +35,7 @@ part2/
 - pip
 
 ---
-## Cài đặt Manim (theo hướng dẫn chính thức với uv)
+## Cài đặt Manim
 
 ### 1. Cài uv
 
@@ -43,6 +43,13 @@ part2/
 pip install uv
 ```
 ### 2. Tạo môi trường ảo
+
+Tại thư mục chứa manim_scene:
+
+```bash
+uv venv
+```
+
 Kích hoạt môi trường:
 - Windows:
 ```bash
@@ -52,14 +59,9 @@ Kích hoạt môi trường:
 ```bash
 source .venv/bin/activate
 ```
-### 3. Cài manim
+### 3. Cài Manim
 ```bash
-uv pip install manim
-```
-
-### 3. Cài manim
-```bash
-uv pip install manim
+uv add manim
 ```
 ### 4. Cài thêm dependencies khác
 - Cài FFmpeg (nếu chưa có):
@@ -102,8 +104,10 @@ Video được lưu tại: media/videos/manim_scene/
 __pycache__/
 media/
 - Nếu lỗi render:
-+ kiểm tra FFmpeg đã cài chưa
-+ kiểm tra LaTeX 
+
+  + kiểm tra FFmpeg đã cài chưa
+
+  + kiểm tra LaTeX 
 
 ---
 ## Tham khảo
