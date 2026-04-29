@@ -147,7 +147,7 @@ class CholeskyForm(Scene):
     def construct(self):
         self.camera.background_color = BLACK
 
-        #Matrix A (ở giữa)
+        #Matrix A
         A = MathTex(
             r"\begin{bmatrix} a_{11} & a_{12} & \cdots & a_{1n} \\"
             r"a_{21} & a_{22} & \cdots & a_{2n} \\"
@@ -325,7 +325,6 @@ class CholeskyStep1(Scene):
 
         # tính toán
         calc = MathTex(r"l_{11} = \sqrt{4} = 2")
-        #calc.next_to(A, DOWN)
         calc.move_to(DOWN*2.6)
 
         self.play(Write(calc))
@@ -585,7 +584,7 @@ class CholeskyStep4(Scene):
         entries = A.get_entries()
         L_entries = L.get_entries()
 
-        # 🔥 highlight a32, l31, l21
+        # highlight a32, l31, l21
         self.play(
             entries[7].animate.set_color(RED),      # a32
             L_entries[6].animate.set_color(YELLOW), # l31
@@ -605,7 +604,7 @@ class CholeskyStep4(Scene):
         self.play(calc.animate.set_color(YELLOW))
         self.wait(0.3)
 
-        # bay công thức
+        # công thức
         fly = calc.copy()
 
         self.play(
@@ -671,7 +670,7 @@ class CholeskyStep5(Scene):
         entries = A.get_entries()
         L_entries = L.get_entries()
 
-        # 🔥 highlight a33, l31, l32
+        # highlight a33, l31, l32
         self.play(
             entries[8].animate.set_color(RED),      # a33
             L_entries[6].animate.set_color(YELLOW), # l31
@@ -721,7 +720,7 @@ class Result(Scene):
         title.to_edge(UP)
         self.play(Write(title))
 
-        # ===== MATRIX A =====
+        # MATRIX A
         A = Matrix([
             [4, 2, 2],
             [2, 5, 1],
@@ -731,7 +730,7 @@ class Result(Scene):
         label_A = MathTex("A")
         group_A = VGroup(label_A, A).arrange(DOWN, buff=0.2)
 
-        # ===== MATRIX L =====
+        # MATRIX L
         L = Matrix([
             ["2", "0", "0"],
             ["1", "2", "0"],
@@ -741,7 +740,7 @@ class Result(Scene):
         label_L = MathTex("L")
         group_L = VGroup(label_L, L).arrange(DOWN, buff=0.2)
 
-        # ===== MATRIX LT =====
+        # MATRIX LT 
         LT = Matrix([
             ["2", "1", "1"],
             ["0", "2", "0"],
@@ -751,17 +750,17 @@ class Result(Scene):
         label_LT = MathTex("L^T")
         group_LT = VGroup(label_LT, LT).arrange(DOWN, buff=0.2)
 
-        # ===== dấu = =====
+        # dấu = 
         eq = MathTex("=")
 
-        # ===== layout tổng =====
+        # layout tổng
         group_L_LT = VGroup(group_L, group_LT).arrange(RIGHT, buff=0.4)
 
         full_expr = VGroup(group_A, eq, group_L_LT).arrange(RIGHT, buff=0.8)
         full_expr.scale(0.75)  # 👈 quan trọng: scale nhỏ lại
         full_expr.move_to(ORIGIN).shift(DOWN*0.3)
 
-        # ===== animation =====
+        # animation
 
         # 1. hiện A
         self.play(FadeIn(group_A, shift=UP))
@@ -808,7 +807,7 @@ class Result(Scene):
         self.play(*animations, run_time=1.5)
         self.wait()
 
-        # ===== highlight =====
+        # highlight
         box = SurroundingRectangle(full_expr, color=YELLOW)
         self.play(Create(box))
 
@@ -822,7 +821,7 @@ class DiagonalStep1Eigenvalues(Scene):
     def construct(self):
         self.camera.background_color = BLACK
 
-        # ===== TITLE =====
+        # TITLE 
         title = Text("Diagonalization: Eigenvalues", font_size=36)
         title.to_edge(UP)
 
@@ -830,7 +829,7 @@ class DiagonalStep1Eigenvalues(Scene):
 
         self.play(Write(title), Create(line))
 
-        # ===== MATRIX A =====
+        # MATRIX A 
         A = Matrix([
             [4, 2, 2],
             [2, 5, 1],
@@ -844,7 +843,7 @@ class DiagonalStep1Eigenvalues(Scene):
         self.play(Write(A), Write(label_A))
         self.wait()
 
-        # ===== STEP TEXT =====
+        # STEP TEXT
         step = MathTex(r"\det(A - \lambda I) = 0")
         step.set_color(BLUE)
         step.next_to(line, DOWN, buff=0.4)
@@ -853,18 +852,18 @@ class DiagonalStep1Eigenvalues(Scene):
         self.play(Write(step))
         self.wait()
 
-        # ===== highlight A =====
+        # highlight A
         self.play(A.animate.set_color(RED))
         self.wait()
 
-        # ===== characteristic polynomial (optional fancy) =====
+        # characteristic polynomial
         poly = MathTex(r"\Rightarrow \lambda^3 - 12\lambda^2 + 39\lambda - 36 = 0")
         poly.next_to(A, DOWN, buff=1)
 
         self.play(Write(poly))
         self.wait()
         self.play(A.animate.set_color(WHITE))
-        # ===== eigenvalues =====
+        # eigenvalues
         eig1 = MathTex(r"\lambda_1 = 6")
         eig2 = MathTex(r"\lambda_2 = \lambda_3 = 3")
 
@@ -878,7 +877,7 @@ class DiagonalStep1Eigenvalues(Scene):
         )
         self.wait()
 
-        # ===== highlight từng eigenvalue =====
+        # highlight từng eigenvalue 
         self.play(eig1.animate.set_color(YELLOW))
         self.wait(0.3)
 
@@ -897,7 +896,7 @@ class DiagonalStep2Eigenvectors(Scene):
     def construct(self):
         self.camera.background_color = BLACK
 
-        # ===== TITLE =====
+        # TITLE
         title = Text("Diagonalization: Eigenvectors", font_size=36)
         title.to_edge(UP)
 
@@ -905,7 +904,7 @@ class DiagonalStep2Eigenvectors(Scene):
 
         self.play(Write(title), Create(line))
 
-        # ===== STEP =====
+        #STEP
         step = MathTex(r"(A - \lambda I)x = 0")
         step.set_color(BLUE)
         step.next_to(line, DOWN, buff=0.4)
@@ -913,7 +912,7 @@ class DiagonalStep2Eigenvectors(Scene):
 
         self.play(Write(step))
 
-        # ===== MATRIX A =====
+        #MATRIX A
         A = Matrix([
             [4, 2, 2],
             [2, 5, 1],
@@ -925,7 +924,7 @@ class DiagonalStep2Eigenvectors(Scene):
 
         self.play(Write(A), Write(label_A))
 
-        # ===== eigenvalues (reuse style step 1) =====
+        # eigenvalues
         eig1 = MathTex(r"\lambda_1 = 6")
         eig2 = MathTex(r"\lambda_2 = \lambda_3 = 3")
 
@@ -935,7 +934,7 @@ class DiagonalStep2Eigenvectors(Scene):
         self.play(Write(eig_group))
         self.wait()
 
-        # ===== eigenvectors =====
+        # eigenvectors
         v1 = MathTex(r"v_1 = \begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}")
         v2 = MathTex(r"v_2 = \begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}")
         v3 = MathTex(r"v_3 = \begin{bmatrix}1 \\ 0 \\ -1\end{bmatrix}")
@@ -960,7 +959,6 @@ class DiagonalStep2Eigenvectors(Scene):
         v_group = VGroup(v1, v2, v3)
         v_group.shift(RIGHT*0.5 + DOWN*0.6) 
 
-        # ===== animation từng cái =====
 
         # λ1 → v1
         expr1 = MathTex(r"A - 6I")
@@ -1021,7 +1019,7 @@ class DiagonalStep3PandD(Scene):
     def construct(self):
         self.camera.background_color = BLACK
 
-        # ===== TITLE =====
+        # TITLE
         title = Text("Construct Matrices P and D", font_size=36)
         title.to_edge(UP)
 
@@ -1029,7 +1027,7 @@ class DiagonalStep3PandD(Scene):
 
         self.play(Write(title), Create(line))
 
-        # ===== eigenvectors =====
+        # eigenvectors
         v1 = MathTex(r"\begin{bmatrix}1 \\ 1 \\ 1\end{bmatrix}")
         v2 = MathTex(r"\begin{bmatrix}1 \\ -1 \\ 0\end{bmatrix}")
         v3 = MathTex(r"\begin{bmatrix}1 \\ 0 \\ -1\end{bmatrix}")
@@ -1042,7 +1040,7 @@ class DiagonalStep3PandD(Scene):
         self.play(Write(v_group))
         self.wait()
 
-        # ===== eigenvalues =====
+        # eigenvalues
         l1 = MathTex("6")
         l2 = MathTex("3")
         l3 = MathTex("3")
@@ -1054,7 +1052,7 @@ class DiagonalStep3PandD(Scene):
         self.play(Write(lambda_group))
         self.wait()
 
-        # ===== MATRIX P =====
+        # MATRIX P
         P = Matrix([
             ["?", "?", "?"],
             ["?", "?", "?"],
@@ -1069,7 +1067,7 @@ class DiagonalStep3PandD(Scene):
         self.play(FadeIn(group_P))
         self.wait()
 
-        # ===== MATRIX D =====
+        # MATRIX D
         D = Matrix([
             ["?", "0", "0"],
             ["0", "?", "0"],
@@ -1085,7 +1083,7 @@ class DiagonalStep3PandD(Scene):
         self.play(FadeIn(group_D))
         self.wait()
 
-        # ===== FILL P =====
+        # FILL P 
         P_entries = P.get_entries()
 
         values = [
@@ -1112,7 +1110,7 @@ class DiagonalStep3PandD(Scene):
                     run_time=0.5
                 )
 
-                # 👉 tạo số mới
+                #tạo số mới
                 new_val = MathTex(values[i][j]).set_color(YELLOW).move_to(target)
 
                 # biến thành số
@@ -1121,14 +1119,14 @@ class DiagonalStep3PandD(Scene):
                     run_time=0.3
                 )
 
-                # 👉 thay dấu ?
+                # thay dấu ?
                 self.remove(target)
                 self.add(new_val)
                 #self.play(FadeOut(vec))
             self.play(FadeOut(vec))
 
 
-        # ===== FILL D =====
+        # FILL D 
         
         D_entries = D.get_entries()
         lambdas = [l1, l2, l3]
@@ -1169,12 +1167,12 @@ class DiagonalStep4Final(Scene):
     def construct(self):
         self.camera.background_color = BLACK
 
-        # ===== TITLE =====
+        # TITLE 
         title = Text("Final: Diagonalization", font_size=36)
         title.to_edge(UP)
         self.play(Write(title))
 
-        # ===== MATRIX A =====
+        # MATRIX A 
         A = Matrix([
             [4, 2, 2],
             [2, 5, 1],
@@ -1183,7 +1181,7 @@ class DiagonalStep4Final(Scene):
         label_A = MathTex("A")
         group_A = VGroup(label_A, A).arrange(DOWN)
 
-        # ===== MATRIX P =====
+        # MATRIX P 
         P = Matrix([
             ["1","1","1"],
             ["1","-1","0"],
@@ -1192,7 +1190,7 @@ class DiagonalStep4Final(Scene):
         label_P = MathTex("P")
         group_P = VGroup(label_P, P).arrange(DOWN)
 
-        # ===== MATRIX D =====
+        # MATRIX D 
         D = Matrix([
             ["6","0","0"],
             ["0","3","0"],
@@ -1201,7 +1199,7 @@ class DiagonalStep4Final(Scene):
         label_D = MathTex("D")
         group_D = VGroup(label_D, D).arrange(DOWN)
 
-        # ===== MATRIX P^-1 (THẬT) =====
+        # MATRIX P^-1 
         Pinv = Matrix([
             ["1/3", "1/3", "1/3"],
             ["1/2", "-1/2", "0"],
@@ -1210,18 +1208,18 @@ class DiagonalStep4Final(Scene):
         label_Pinv = MathTex("P^{-1}")
         group_Pinv = VGroup(label_Pinv, Pinv).arrange(DOWN)
 
-        # ===== dấu = =====
+        # dấu = 
         eq = MathTex("=")
 
-        # ===== layout =====
+        # layout 
         full = VGroup(
             group_A, eq, group_P, group_D, group_Pinv
         ).arrange(RIGHT, buff=0.5)
 
-        full.scale(0.65)  # 👈 quan trọng: fit màn hình
+        full.scale(0.65) 
         full.move_to(ORIGIN).shift(DOWN*0.3)
 
-        # ===== animation =====
+        # animation 
 
         # 1. hiện A
         self.play(FadeIn(group_A, shift=UP))
@@ -1239,7 +1237,7 @@ class DiagonalStep4Final(Scene):
         self.play(FadeIn(group_D, shift=UP))
         self.wait(0.3)
 
-        # ===== tạo P^-1 từ P =====
+        # tạo P^-1 từ P
         P_copy = group_P.copy()
 
         # copy xuất hiện
@@ -1254,13 +1252,13 @@ class DiagonalStep4Final(Scene):
             run_time=0.6
         )
 
-        # xoay nhẹ tạo cảm giác inverse
+        # xoay nhẹ 
         self.play(
             P_copy.animate.scale(0.9).rotate(PI),
             run_time=0.5
         )
 
-        # biến thành ma trận P^-1 thật
+        # biến thành ma trận P^-1 
         self.play(
             Transform(P_copy, group_Pinv),
             run_time=0.7
@@ -1268,7 +1266,7 @@ class DiagonalStep4Final(Scene):
 
         self.wait(0.5)
 
-        # ===== highlight =====
+        # highlight 
         box = SurroundingRectangle(full, color=YELLOW)
         self.play(Create(box))
 

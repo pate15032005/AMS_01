@@ -1,6 +1,4 @@
-﻿##Readme của Diễm Thúy
-
-## Folder Structure
+﻿## Folder Structure
 
 ```
 part2/
@@ -25,9 +23,58 @@ part2/
 │
 ├── .venv/                   # (ignored) Môi trường Python ảo
 ├── __pycache__/             # (ignored) Cache của Python
-├── .gitkeep                 # Keeps empty folders tracked
-├── .python-version          # Python version (optional)
-└── uv.lock                  # Dependency lock file (optional)
+├── .gitkeep                
+├── .python-version        
+└── uv.lock                  
+```
+
+---
+## Yêu cầu môi trường
+
+- Python >= 3.10
+- pip
+
+---
+## Cài đặt Manim (theo hướng dẫn chính thức với uv)
+
+### 1. Cài uv
+
+```bash
+pip install uv
+```
+### 2. Tạo môi trường ảo
+Kích hoạt môi trường:
+- Windows:
+```bash
+.venv\Scripts\activate
+```
+- macOS / Linux:
+```bash
+source .venv/bin/activate
+```
+### 3. Cài manim
+```bash
+uv pip install manim
+```
+
+### 3. Cài manim
+```bash
+uv pip install manim
+```
+### 4. Cài thêm dependencies khác
+- Cài FFmpeg (nếu chưa có):
+	+ Windows: Tải từ https://ffmpeg.org/download.html và thêm vào PATH
+	+ macOS: ```brew install ffmpeg```
+	+ Linux: ```sudo apt install ffmpeg```
+
+- Cài LaTeX:
+	+ Windows: Tải MiKTeX từ https://miktex.org/download
+	+ macOS: ```brew install --cask mactex```
+	+ Linux: ```sudo apt install texlive-full```
+
+- Cài dependencies của project
+```bash
+uv sync
 ```
 
 ---
@@ -43,3 +90,21 @@ Gõ các lệnh sau trong terminal để chạy các scene của manim:
 - Lưu ý: ```-pql``` là viết tắt của "preview quality low", nghĩa là chất lượng video sẽ ở mức thấp để render nhanh hơn.
 	+ Để xuất video với chất lượng cao hơn, thay đổi ```-pql``` thành ```-pqh``` hoặc ```-pqm``` tùy vào chất lượng mong muốn.
 	+ Ví dụ: ```uv run manim -pqh manim_scene.py className```
+
+---
+## Output
+Video được lưu tại: media/videos/manim_scene/
+
+---
+## Lưu ý
+- Không cần commit:
+.venv/
+__pycache__/
+media/
+- Nếu lỗi render:
++ kiểm tra FFmpeg đã cài chưa
++ kiểm tra LaTeX 
+
+---
+## Tham khảo
+- Các bước cài đặt thư viện Manim: https://docs.manim.community/en/stable/installation/uv.html
