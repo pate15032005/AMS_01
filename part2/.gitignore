@@ -1,0 +1,13 @@
+
+__pycache__/
+*.pyc
+
+.venv/
+
+media/
+
+.DS_Store
+Thumbs.db
+
+uv.lock
+.python-version
