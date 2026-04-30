@@ -107,8 +107,8 @@ def verify_rank(A, my_rank):
     A_np = np.array(A, dtype=float)
     np_rank = np.linalg.matrix_rank(A_np)
     
-    print(f"Rank tự tính: {my_rank}")
-    print(f"Rank của NumPy: {np_rank}")
+    print(f"Rank by implementation: {my_rank}")
+    print(f"Rank by NumPy: {np_rank}")
     
     if my_rank == np_rank:
         print("=> VERIFICATION SUCCESS: Rank is correct.")
