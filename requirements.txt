@@ -1,1 +1,37 @@
+# ============================================================================
+# Requirements for AMS_01: Advanced Matrix System
+# ============================================================================
+# Project structure:
+#   - part0: Helper functions for matrix operations
+#   - part1: Gaussian elimination, Determinant, Inverse, Rank & Basis
+#   - part2: Eigenvalues, Eigenvectors, Diagonalization, Decomposition
+#   - part3: Solver algorithms (Gaussian, Gauss-Seidel, Cholesky)
+# ============================================================================
+
+# --- Core Dependencies ---
+# NumPy: Matrix operations and numerical computing
+numpy>=1.24.0
+
+# --- Visualization & Animation ---
+# Manim: Mathematical animation framework for creating visualizations
+# Used in part2 for creating animation scenes
+manim>=0.20.1
+
+# Matplotlib: Static, animated, and interactive visualizations
+matplotlib>=3.5.0
+
+# --- Scientific Computing ---
+# SciPy: Scientific computing tools (linear algebra, optimization, etc.)
+scipy>=1.10.0
+
+# --- Jupyter Notebook Support ---
+# Essential for running .ipynb files interactively
+jupyter>=1.0.0
+ipython>=8.0.0
+
+# --- Development & Testing (Optional) ---
+# Uncomment if needed for development:
+# pytest>=7.0.0              # Unit testing framework
+# black>=22.0.0              # Code formatter
+# pylint>=2.0.0              # Code quality checker
 
